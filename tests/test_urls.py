@@ -32,15 +32,11 @@ def reset_db():
 client = TestClient(app)
 
 
-# -- Health ------------------------------------------------------------------
-
 def test_health():
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
 
-
-# -- Shorten -----------------------------------------------------------------
 
 def test_shorten_returns_code_and_short_url():
     response = client.post("/shorten", json={"url": "https://example.com"})
@@ -67,8 +63,6 @@ def test_shorten_missing_url_returns_422():
     assert response.status_code == 422
 
 
-# -- Redirect ----------------------------------------------------------------
-
 def test_redirect():
     code = client.post("/shorten", json={"url": "https://example.com"}).json()["code"]
     response = client.get(f"/{code}", follow_redirects=False)
@@ -91,8 +85,6 @@ def test_redirect_not_found():
     response = client.get("/nonexistent", follow_redirects=False)
     assert response.status_code == 404
 
-
-# -- List --------------------------------------------------------------------
 
 def test_list_urls_empty():
     response = client.get("/urls")

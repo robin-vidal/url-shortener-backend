@@ -33,7 +33,7 @@ def shorten_url(payload: ShortenRequest, db: Session = Depends(get_db)):
 
 @router.get("/urls")
 def list_urls(db: Session = Depends(get_db)):
-    return db.query(URL).order_by(URL.created_at.desc()).all()
+    return db.query(URL).order_by(URL.id.desc()).all()
 
 
 @router.get("/{code}")

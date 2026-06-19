@@ -66,7 +66,7 @@ def test_shorten_missing_url_returns_422():
 
 def test_redirect():
     code = client.post("/shorten", json={"url": "https://example.com"}).json()["code"]
-    response = client.get(f"/{code}", follow_redirects=False)
+    response = client.get(f"/r/{code}", follow_redirects=False)
     assert response.status_code == 302
     assert response.headers["location"] == "https://example.com"
 
@@ -74,8 +74,8 @@ def test_redirect():
 def test_redirect_increments_clicks():
     from app.models import URL
     code = client.post("/shorten", json={"url": "https://example.com"}).json()["code"]
-    client.get(f"/{code}", follow_redirects=False)
-    client.get(f"/{code}", follow_redirects=False)
+    client.get(f"/r/{code}", follow_redirects=False)
+    client.get(f"/r/{code}", follow_redirects=False)
     db = TestingSessionLocal()
     entry = db.query(URL).filter(URL.code == code).first()
     db.close()

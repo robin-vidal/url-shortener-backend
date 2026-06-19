@@ -28,7 +28,7 @@ def shorten_url(payload: ShortenRequest, db: Session = Depends(get_db)):
     db.add(entry)
     db.commit()
     db.refresh(entry)
-    return {"code": entry.code, "short_url": f"/{entry.code}"}
+    return {"code": entry.code, "short_url": f"/r/{entry.code}"}
 
 
 @router.get("/urls")
@@ -36,7 +36,7 @@ def list_urls(db: Session = Depends(get_db)):
     return db.query(URL).order_by(URL.id.desc()).all()
 
 
-@router.get("/{code}")
+@router.get("/r/{code}")
 def redirect(code: str, db: Session = Depends(get_db)):
     entry = db.query(URL).filter(URL.code == code).first()
     if not entry:
